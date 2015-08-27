@@ -1,4 +1,4 @@
-
+#das ist ein quiz
 import random
 
 while True:
