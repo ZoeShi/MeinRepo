@@ -1,0 +1,296 @@
+#!/usr/bin/env python
+# -*- Mode: Python; coding: utf-8; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- 
+#
+# main.py
+# Copyright (C) 2015 Unknown <l@tux>
+# 
+# pygtk-foobar is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# pygtk-foobar is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License along
+# with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+from gi.repository import Gtk, GdkPixbuf, Gdk
+import os, sys
+
+import math
+
+def kreisumfang(r):
+    return 2 * math.pi * r
+
+def flaecheninhaltkreis(r):
+    return math.pi * r ** 2
+
+def volumenkugel(r):
+    return 4 / 3 * math.pi * r ** 3
+
+def quadratvolumen(a):
+    return a ** 3
+    
+def flaecheninhaltquadrat(a):
+    return a ** 2
+
+def flaecheninhaltrechteck(a, b):
+    return a * b
+
+def flaecheninhaltparallelogram(a, h):
+    return g * h
+
+def flaecheninhaltraute(e, f):
+    return e * f / 2
+
+def flaecheninhalttrapez(a, c, h):
+    return a + c / 2 * h
+    
+def flaecheninhaltdreieck(c, h):
+    return 1 / 2 * c * h
+    
+def flaecheninhaltrechtwinkligesdreieck(a, b):
+    return a * b / 2
+
+def volumenpyramide(a, b, h):
+    return 1 / 3 * a * b * h
+
+def volumenzylinder(r, h):
+    return math.pi * r ** 2 * h
+
+def prozentwert(G,p):
+    return G * p / 100
+
+def prozentzahl(W,G):
+    return W / G * 100
+
+def grundwert(W,p):
+    return W * 100 / p 
+#Comment the first line and uncomment the second before installing
+#or making the tarball (alternatively, use project variables)
+UI_FILE = "src/pygtk_foobar.ui"
+#UI_FILE = "/usr/local/share/pygtk_foobar/ui/pygtk_foobar.ui"
+
+
+class GUI:
+	def __init__(self):
+
+		self.builder = Gtk.Builder()
+		self.builder.add_from_file(UI_FILE)
+		self.builder.connect_signals(self)
+
+		window = self.builder.get_object('window')
+		self.input_grid = self.builder.get_object('input_grid')
+		self.ergebnis_entry = self.builder.get_object('ergebnis_entry')
+		self.formula_combobox = self.builder.get_object('formula_combobox')
+
+		window.show_all()
+
+	def on_window_destroy(self, window):
+		Gtk.main_quit()
+		
+	def on_formula_combobox_changed(self, comboboxtext):
+		for i in self.input_grid.get_children():
+			i.destroy()
+			
+		eingabe = self.formula_combobox.get_active_text()
+		print (eingabe)
+		if eingabe == "KreisUmfang":
+			self.r_label = Gtk.Label("r")
+			self.input_grid.attach(self.r_label, 1, 1, 1, 1)
+			self.r_entry = Gtk.Entry()
+			self.input_grid.attach(self.r_entry, 2, 1, 1, 1)
+			self.input_grid.show_all()
+		elif eingabe == "FlaecheninhaltKreis":
+			self.r_label = Gtk.Label("r")
+			self.input_grid.attach(self.r_label, 1, 1, 1, 1)
+			self.r_entry = Gtk.Entry()
+			self.input_grid.attach(self.r_entry, 2, 1, 1, 1)
+			self.input_grid.show_all()
+		elif eingabe == "VolumenKugel":
+			self.r_label = Gtk.Label("r")
+			self.input_grid.attach(self.r_label, 1, 1, 1, 1)
+			self.r_entry = Gtk.Entry()
+			self.input_grid.attach(self.r_entry, 2, 1, 1, 1)
+			self.input_grid.show_all()
+		elif eingabe == "QuadratVolumen":
+			self.a_label = Gtk.Label("a")
+			self.input_grid.attach(self.a_label, 1, 1, 1, 1)
+			self.a_entry = Gtk.Entry()
+			self.input_grid.attach(self.a_entry, 2, 1, 1, 1)
+			self.input_grid.show_all()
+		elif eingabe == "FlaecheninhaltQuadrat":
+			self.a_label = Gtk.Label("a")
+			self.input_grid.attach(self.a_label, 1, 1, 1, 1)
+			self.a_entry = Gtk.Entry()
+			self.input_grid.attach(self.a_entry, 2, 1, 1, 1)
+			self.input_grid.show_all()
+		elif eingabe == "FlaecheninhaltRechteck":
+			self.a_label = Gtk.Label("a")
+			self.b_label = Gtk.Label("b")
+			self.input_grid.attach(self.a_label, 1, 1, 1, 1)
+			self.input_grid.attach(self.b_label, 1, 2, 1, 1)
+			self.a_entry = Gtk.Entry()
+			self.b_entry = Gtk.Entry()
+			self.input_grid.attach(self.a_entry, 2, 1, 1, 1)
+			self.input_grid.attach(self.b_entry, 2, 2, 1, 1)
+			self.input_grid.show_all()
+		elif eingabe == "FlaecheninhaltParallelogram":
+			self.g_label = Gtk.Label("g")
+			self.h_label = Gtk.Label("h")
+			self.input_grid.attach(self.g_label, 1, 1, 1, 1)
+			self.input_grid.attach(self.h_label, 1, 2, 1, 1)
+			self.g_entry = Gtk.Entry()
+			self.h_entry = Gtk.Entry()
+			self.input_grid.attach(self.g_entry, 2, 1, 1, 1)
+			self.input_grid.attach(self.h_entry, 2, 2, 1, 1)
+			self.input_grid.show_all()
+		elif eingabe == "FlaecheninhaltRaute":
+			self.e_label = Gtk.Label("e")
+			self.f_label = Gtk.Label("f")
+			self.input_grid.attach(self.e_label, 1, 1, 1, 1)
+			self.input_grid.attach(self.f_label, 1, 2, 1, 1)
+			self.e_entry = Gtk.Entry()
+			self.f_entry = Gtk.Entry()
+			self.input_grid.attach(self.e_entry, 2, 1, 1, 1)
+			self.input_grid.attach(self.f_entry, 2, 2, 1, 1)
+			self.input_grid.show_all()
+		elif eingabe == "FlaecheninhaltTrapez":
+			self.a_label = Gtk.Label("a")
+			self.c_label = Gtk.Label("c")
+			self.h_label = Gtk.Label("h")
+			self.input_grid.attach(self.a_label, 1, 1, 1, 1)
+			self.input_grid.attach(self.c_label, 1, 2, 1, 1)
+			self.input_grid.attach(self.h_label, 1, 3, 1, 1)
+			self.a_entry = Gtk.Entry()
+			self.c_entry = Gtk.Entry()
+			self.h_entry = Gtk.Entry()
+			self.input_grid.attach(self.a_entry, 2, 1, 1, 1)
+			self.input_grid.attach(self.c_entry, 2, 2, 1, 1)
+			self.input_grid.attach(self.h_entry, 2, 3, 1, 1)
+			self.input_grid.show_all()
+		elif eingabe == "FlaecheninhaltDreieck":
+			self.c_label = Gtk.Label("c")
+			self.h_label = Gtk.Label("h")
+			self.input_grid.attach(self.c_label, 1, 1, 1, 1)
+			self.input_grid.attach(self.h_label, 1, 2, 1, 1)
+			self.c_entry = Gtk.Entry()
+			self.h_entry = Gtk.Entry()
+			self.input_grid.attach(self.c_entry, 2, 1, 1, 1)
+			self.input_grid.attach(self.h_entry, 2, 2, 1, 1)
+			self.input_grid.show_all()
+		elif eingabe == "FlaecheninhaltRechtwinkligesDreieck":
+			self.a_label = Gtk.Label("a")
+			self.b_label = Gtk.Label("b")
+			self.input_grid.attach(self.a_label, 1, 1, 1, 1)
+			self.input_grid.attach(self.b_label, 1, 2, 1, 1)
+			self.a_entry = Gtk.Entry()
+			self.b_entry = Gtk.Entry()
+			self.input_grid.attach(self.a_entry, 2, 1, 1, 1)
+			self.input_grid.attach(self.b_entry, 2, 2, 1, 1)
+			self.input_grid.show_all()
+		elif eingabe == "VolumenPyramide":
+			self.a_label = Gtk.Label("a")
+			self.b_label = Gtk.Label("b")
+			self.h_label = Gtk.Label("h")
+			self.input_grid.attach(self.a_label, 1, 1, 1, 1)
+			self.input_grid.attach(self.b_label, 1, 2, 1, 1)
+			self.input_grid.attach(self.h_label, 1, 3, 1, 1)
+			self.a_entry = Gtk.Entry()
+			self.b_entry = Gtk.Entry()
+			self.h_entry = Gtk.Entry()
+			self.input_grid.attach(self.a_entry, 2, 1, 1, 1)
+			self.input_grid.attach(self.b_entry, 2, 2, 1, 1)
+			self.input_grid.attach(self.h_entry, 2, 3, 1, 1)
+			self.input_grid.show_all()
+		elif eingabe == "VolumenZylinder":
+			self.r_label = Gtk.Label("r")
+			self.h_label = Gtk.Label("h")
+			self.input_grid.attach(self.r_label, 1, 1, 1, 1)
+			self.input_grid.attach(self.h_label, 1, 2, 1, 1)
+			self.r_entry = Gtk.Entry()
+			self.h_entry = Gtk.Entry()
+			self.input_grid.attach(self.r_entry, 2, 1, 1, 1)
+			self.input_grid.attach(self.h_entry, 2, 2, 1, 1)
+			self.input_grid.show_all()
+		elif eingabe == "Prozentwert":
+			self.G_label = Gtk.Label("G")
+			self.p_label = Gtk.Label("p")
+			self.input_grid.attach(self.G_label, 1, 1, 1, 1)
+			self.input_grid.attach(self.p_label, 1, 2, 1, 1)
+			self.G_entry = Gtk.Entry()
+			self.p_entry = Gtk.Entry()
+			self.input_grid.attach(self.G_entry, 2, 1, 1, 1)
+			self.input_grid.attach(self.p_entry, 2, 2, 1, 1)
+			self.input_grid.show_all()
+		elif eingabe == "Prozentzahl":
+			self.G_label = Gtk.Label("G")
+			self.W_label = Gtk.Label("W")
+			self.input_grid.attach(self.G_label, 1, 1, 1, 1)
+			self.input_grid.attach(self.W_label, 1, 2, 1, 1)
+			self.G_entry = Gtk.Entry()
+			self.W_entry = Gtk.Entry()
+			self.input_grid.attach(self.G_entry, 2, 1, 1, 1)
+			self.input_grid.attach(self.W_entry, 2, 2, 1, 1)
+			self.input_grid.show_all()
+
+		elif eingabe == "Grundwert":
+			self.p_label = Gtk.Label("g")
+			self.W_label = Gtk.Label("W")
+			self.input_grid.attach(self.p_label, 1, 1, 1, 1)
+			self.input_grid.attach(self.W_label, 1, 2, 1, 1)
+			self.p_entry = Gtk.Entry()
+			self.W_entry = Gtk.Entry()
+			self.input_grid.attach(self.p_entry, 2, 1, 1, 1)
+			self.input_grid.attach(self.W_entry, 2, 2, 1, 1)
+			self.input_grid.show_all()
+			
+	def on_calculate_button_clicked(self, button):
+		eingabe = self.formula_combobox.get_active_text()
+		ergebnis = 0
+		#print (eingabe)
+		if eingabe == "KreisUmfang":
+			ergebnis = kreisumfang(float(self.r_entry.get_text()))
+		elif eingabe == "FlaecheninhaltKreis":
+			ergebnis = flaecheninhaltkreis(float(self.r_entry.get_text()))
+		elif eingabe == "VolumenKugel":
+			ergebnis = volumenkugel(float(self.r_entry.get_text()))
+		elif eingabe == "QuadratVolumen":
+			ergebnis = quadratvolumen(float(self.a_entry.get_text()))
+		elif eingabe == "FlaecheninhaltQuadrat":
+			ergebnis = flaecheninhaltquadrat(float(self.a_entry.get_text()))
+		elif eingabe == "FlaecheninhaltRechteck":
+			ergebnis = flaecheninhaltrechteck(float(self.a_entry.get_text()), float(self.b_entry.get_text()))
+		elif eingabe == "FlaecheninhaltParallelogram":
+			ergebnis = flaecheninhaltparallelogram(float(self.g_entry.get_text()), float(self.h_entry.get_text()))
+		elif eingabe == "FlaecheninhaltRaute":
+			ergebnis = flaecheninhaltraute(float(self.e_entry.get_text()), float(self.f_entry.get_text()))	
+		elif eingabe == "FlaecheninhaltTrapez":
+			ergebnis = flaecheninhalttrapez(float(self.c_entry.get_text()), float(self.h_entry.get_text()), float(self.a_entry.get_text()))	
+		elif eingabe == "FlaecheninhaltDreieck":
+			ergebnis = flaecheninhaltdreieck(float(self.c_entry.get_text()), float(self.h_entry.get_text()))
+		elif eingabe == "FlaecheninhaltRechtwinkligesDreieck":
+			ergebnis = flaecheninhaltrechtwinkligesdreieck(float(self.a_entry.get_text()), float(self.b_entry.get_text()))
+		elif eingabe == "VolumenPyramide":
+			ergebnis = volumenpyramide(float(self.a_entry.get_text()), float(self.b_entry.get_text()), float(self.h_entry.get_text()))
+		elif eingabe == "VolumenZylinder":
+			ergebnis = volumenzylinder(float(self.r_entry.get_text()), float(self.h_entry.get_text()))
+		elif eingabe == "Prozentwert":
+			ergebnis = prozentwert(float(self.G_entry.get_text()), float(self.p_entry.get_text()))
+		elif eingabe == "Prozentzahl":
+			ergebnis = prozentzahl(float(self.G_entry.get_text()), float(self.W_entry.get_text()))
+		elif eingabe == "Grundwert":
+			ergebnis = grundwert(float(self.p_entry.get_text()), float(self.W_entry.get_text()))
+		self.ergebnis_entry.set_text(str(ergebnis))
+		
+def main():
+	app = GUI()
+	Gtk.main()
+	
+if __name__ == "__main__":
+	sys.exit(main())
+
+
